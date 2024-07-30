@@ -5,6 +5,8 @@ import com.example.demo.Member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostService {
 
@@ -14,11 +16,55 @@ public class PostService {
     @Autowired
     private MemberRepository memberRepository;
 
+    // 게시글 작성
     public Post createPost(String loginId, PostDto postDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
         Post post = new Post(member, postDto.getTitle(), postDto.getContent());
         return postRepository.save(post);
+    }
+    // 게시글 수정
+    public Post updatePost(String loginId, Long postId, PostDto postDto) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        // 작성자 본인 확인
+        if (!post.getMember().equals(member)) {
+            throw new IllegalStateException("You can only edit your own posts");
+        }
+
+        // 게시글 내용 수정
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        return postRepository.save(post);
+    }
+    // 게시글 삭제
+    public void deletePost(String loginId, Long postId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        // 작성자 본인 확인
+        if (!post.getMember().equals(member)) {
+            throw new IllegalStateException("You can only delete your own posts");
+        }
+
+        // 게시글 삭제
+        postRepository.delete(post);
+    }
+    // 모든 게시글 조회
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+    // 특정 게시글 조회
+    public Post getPostById(Long postId) {
+        return postRepository.findById(postId).orElse(null);
     }
 }
