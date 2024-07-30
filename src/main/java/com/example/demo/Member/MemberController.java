@@ -79,4 +79,17 @@ public class MemberController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+    @GetMapping("/me/posts/count")
+    public ResponseEntity<Long> countMyPosts(Authentication authentication) {
+        String loginId = authentication.getName();
+        long count = memberService.countUserPosts(loginId);
+        return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/me/comments/count")
+    public ResponseEntity<Long> countMyComments(Authentication authentication) {
+        String loginId = authentication.getName();
+        long count = memberService.countUserComments(loginId);
+        return ResponseEntity.ok(count);
+    }
 }
