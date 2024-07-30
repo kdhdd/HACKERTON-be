@@ -1,11 +1,15 @@
 package com.example.demo.Member;
 
+import com.example.demo.Post.Post;
 import com.example.demo.UserRole;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -29,4 +33,8 @@ public class Member {
 
     @CreationTimestamp
     private LocalDateTime registerDate;
+
+    @OneToMany(mappedBy = "member")
+    @JsonManagedReference
+    private List<Post> posts = new ArrayList<>();
 }
