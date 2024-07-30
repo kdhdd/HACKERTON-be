@@ -1,5 +1,7 @@
 package com.example.demo.Member;
 
+import com.example.demo.Comment.CommentRepository;
+import com.example.demo.Post.PostRepository;
 import com.example.demo.auth.JwtTokenUtil;
 import com.example.demo.request.JoinRequest;
 import com.example.demo.request.LoginRequest;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final BCryptPasswordEncoder encoder;
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -98,5 +102,16 @@ public class MemberService {
         } else {
             throw new RuntimeException("Member not found with loginId " + loginId);
         }
+    }
+    public long countUserPosts(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        return postRepository.countByMember(member);
+    }
+
+    public long countUserComments(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        return commentRepository.countByMember(member);
     }
 }
