@@ -23,18 +23,19 @@ public class CommentService {
     private MemberRepository memberRepository;
 
     // 댓글 작성
-    public Comment createComment(String loginId, Long postId, CommentDto commentDto) {
+    public CommentDto createComment(String loginId, Long postId, CommentDto commentDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("Post not found"));
 
-        Comment comment = new Comment(post, member, commentDto.getContent());
-        return commentRepository.save(comment);
+        Comment comment = new Comment(post, member, commentDto.getComment());
+        Comment savedComment = commentRepository.save(comment);
+        return CommentDto.fromComment(savedComment);
     }
 
     // 댓글 수정
-    public Comment updateComment(String loginId, Long commentId, CommentDto commentDto) {
+    public CommentDto updateComment(String loginId, Long commentId, CommentDto commentDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
@@ -47,8 +48,9 @@ public class CommentService {
         }
 
         // 댓글 내용 수정
-        comment.setContent(commentDto.getContent());
-        return commentRepository.save(comment);
+        comment.setContent(commentDto.getComment());
+        Comment updatedComment = commentRepository.save(comment);
+        return CommentDto.fromComment(updatedComment);
     }
 
     // 댓글 삭제
@@ -69,14 +71,17 @@ public class CommentService {
     }
 
     // 특정 게시글의 모든 댓글 조회
-    public List<Comment> getAllCommentsForPost(Long postId) {
+    public List<CommentDto> getAllCommentsForPost(Long postId) {
         return commentRepository.findAll().stream()
                 .filter(comment -> comment.getPost().getId().equals(postId))
+                .map(CommentDto::fromComment)
                 .collect(Collectors.toList());
     }
 
     // 특정 댓글 조회
-    public Comment getCommentById(Long commentId) {
-        return commentRepository.findById(commentId).orElse(null);
+    public CommentDto getCommentById(Long commentId) {
+        return commentRepository.findById(commentId)
+                .map(CommentDto::fromComment)
+                .orElse(null);
     }
 }

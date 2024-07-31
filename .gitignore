@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+##프로펄티나야믈파일관련##
+src/main/resources/application.yml
+src/main/resources/application.properties

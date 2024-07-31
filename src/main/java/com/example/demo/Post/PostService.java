@@ -5,6 +5,7 @@ import com.example.demo.Member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,8 +21,15 @@ public class PostService {
     public Post createPost(String loginId, PostDto postDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        // 하루에 한 번만 글 작성할 수 있도록 제한
+        if (member.getLastPostDate() != null && member.getLastPostDate().isEqual(LocalDate.now())) {
+            throw new IllegalStateException("You can only post once a day");
+        }
 
         Post post = new Post(member, postDto.getTitle(), postDto.getContent());
+        member.setLastPostDate(LocalDate.now());
+        memberRepository.save(member);
+
         return postRepository.save(post);
     }
     // 게시글 수정
