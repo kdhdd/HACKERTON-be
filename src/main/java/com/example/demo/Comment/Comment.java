@@ -24,6 +24,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
+    @JsonBackReference
     private Member member;
 
     @Column(nullable = false)
