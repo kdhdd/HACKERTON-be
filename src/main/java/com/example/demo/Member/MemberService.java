@@ -103,12 +103,14 @@ public class MemberService {
             throw new RuntimeException("Member not found with loginId " + loginId);
         }
     }
+    //유저 개시글 갯수 세기
     public long countUserPosts(String loginId) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
         return postRepository.countByMember(member);
     }
 
+    //유저 댓글 갯수 세기
     public long countUserComments(String loginId) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
