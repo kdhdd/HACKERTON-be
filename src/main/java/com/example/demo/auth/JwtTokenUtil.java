@@ -11,11 +11,9 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+    private String secretKey = "your_secret_key";
 
-    @Value("${jwt.token-validity}")
-    private long tokenValidity; // 1시간
+    private long tokenValidity = 3600000L; // 1시간
 
     // JWT Token 발급
     public String createToken(String loginId) {
