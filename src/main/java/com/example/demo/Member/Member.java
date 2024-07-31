@@ -1,7 +1,9 @@
 package com.example.demo.Member;
 
+import com.example.demo.Comment.Comment;
 import com.example.demo.Post.Post;
 import com.example.demo.UserRole;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,4 +39,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    @JsonBackReference
+    private List<Comment> comments = new ArrayList<>();
 }
