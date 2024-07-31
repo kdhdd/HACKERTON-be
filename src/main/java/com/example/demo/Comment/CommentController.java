@@ -19,19 +19,19 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("/{postId}")
-    public ResponseEntity<Comment> createComment(@RequestHeader("Authorization") String token, @PathVariable Long postId, @RequestBody CommentDto commentDto) {
+    public ResponseEntity<CommentDto> createComment(@RequestHeader("Authorization") String token, @PathVariable Long postId, @RequestBody CommentDto commentDto) {
         String jwtToken = token.substring(7); // "Bearer " 문자열 제거
         String loginId = jwtTokenUtil.getLoginId(jwtToken); // JWT에서 가져온 로그인 id
-        Comment comment = commentService.createComment(loginId, postId, commentDto);
-        return ResponseEntity.ok(comment);
+        CommentDto savedComment = commentService.createComment(loginId, postId, commentDto);
+        return ResponseEntity.ok(savedComment);
     }
 
     // 댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<Comment> updateComment(@RequestHeader("Authorization") String token, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
+    public ResponseEntity<CommentDto> updateComment(@RequestHeader("Authorization") String token, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
         String jwtToken = token.substring(7);
         String loginId = jwtTokenUtil.getLoginId(jwtToken);
-        Comment updatedComment = commentService.updateComment(loginId, commentId, commentDto);
+        CommentDto updatedComment = commentService.updateComment(loginId, commentId, commentDto);
         return ResponseEntity.ok(updatedComment);
     }
 
@@ -46,15 +46,15 @@ public class CommentController {
 
     // 특정 게시글의 모든 댓글 조회
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<Comment>> getAllCommentsForPost(@PathVariable Long postId) {
-        List<Comment> comments = commentService.getAllCommentsForPost(postId);
+    public ResponseEntity<List<CommentDto>> getAllCommentsForPost(@PathVariable Long postId) {
+        List<CommentDto> comments = commentService.getAllCommentsForPost(postId);
         return ResponseEntity.ok(comments);
     }
 
     // 특정 댓글 조회
     @GetMapping("/{commentId}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable Long commentId) {
-        Comment comment = commentService.getCommentById(commentId);
+    public ResponseEntity<CommentDto> getCommentById(@PathVariable Long commentId) {
+        CommentDto comment = commentService.getCommentById(commentId);
         return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
     }
 }

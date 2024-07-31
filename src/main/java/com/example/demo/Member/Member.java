@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,4 +44,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     @JsonBackReference
     private List<Comment> comments = new ArrayList<>();
+
+    //유저 하루에 한 번만 글을 작성할 수 있도록 하기 위해
+    private LocalDate lastPostDate;
 }
