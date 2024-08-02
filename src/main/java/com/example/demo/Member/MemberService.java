@@ -1,7 +1,7 @@
 package com.example.demo.Member;
 
 import com.example.demo.Comment.CommentRepository;
-import com.example.demo.Heart.HeartRepository;
+//import com.example.demo.Heart.HeartRepository;
 import com.example.demo.Post.PostRepository;
 import com.example.demo.auth.JwtTokenUtil;
 import com.example.demo.request.JoinRequest;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final HeartRepository heartRepository;
+//    private final HeartRepository heartRepository;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
@@ -120,18 +120,18 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
         return commentRepository.countByMember(member);
     }
-    // 총 하트 수로 상위 3명 회원 조회
-    public List<Member> getTop3MembersByHearts() {
-        return memberRepository.findAll().stream()
-                .sorted((m1, m2) -> Long.compare(getTotalHeartsForMember(m2), getTotalHeartsForMember(m1)))
-                .limit(3)
-                .collect(Collectors.toList());
-    }
+//    // 총 하트 수로 상위 3명 회원 조회
+//    public List<Member> getTop3MembersByHearts() {
+//        return memberRepository.findAll().stream()
+//                .sorted((m1, m2) -> Long.compare(getTotalHeartsForMember(m2), getTotalHeartsForMember(m1)))
+//                .limit(3)
+//                .collect(Collectors.toList());
+//    }
 
-    // 회원의 총 하트 수 계산
-    public long getTotalHeartsForMember(Member member) {
-        return member.getPosts().stream()
-                .mapToLong(post -> heartRepository.countByPost(post))
-                .sum();
-    }
+//    // 회원의 총 하트 수 계산
+//    public long getTotalHeartsForMember(Member member) {
+//        return member.getPosts().stream()
+//                .mapToLong(post -> heartRepository.countByPost(post))
+//                .sum();
+//    }
 }

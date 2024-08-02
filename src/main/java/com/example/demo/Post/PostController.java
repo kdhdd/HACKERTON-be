@@ -29,7 +29,7 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
     // 게시글 수정
-    @PutMapping("/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<Post> updatePost(@RequestHeader("Authorization") String token, @PathVariable Long id, @RequestBody PostDto postDto) {
         String jwtToken = token.substring(7);
         String email = jwtTokenUtil.getLoginId(jwtToken);
@@ -62,5 +62,11 @@ public class PostController {
         Post post = postService.getPostById(id);
         // 조회된 게시글이 있으면 OK 응답과 함께 게시글 반환, 없으면 404 Not Found 반환
         return post != null ? ResponseEntity.ok(post) : ResponseEntity.notFound().build();
+    }
+    // 닉네임으로 게시글 조회
+    @GetMapping("/user/{nickname}")
+    public ResponseEntity<List<PostDto>> getPostsByNickname(@PathVariable String nickname) {
+        List<PostDto> posts = postService.getPostsByNickname(nickname);
+        return ResponseEntity.ok(posts);
     }
 }

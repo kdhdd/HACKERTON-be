@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -46,7 +47,6 @@ public class PostService {
         }
 
         // 게시글 내용 수정
-        post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
         return postRepository.save(post);
     }
@@ -74,5 +74,11 @@ public class PostService {
     // 특정 게시글 조회
     public Post getPostById(Long postId) {
         return postRepository.findById(postId).orElse(null);
+    }
+
+    // 닉네임으로 게시글 조회
+    public List<PostDto> getPostsByNickname(String nickname) {
+        List<Post> posts = postRepository.findByMemberNickname(nickname);
+        return posts.stream().map(PostDto::fromPost).collect(Collectors.toList());
     }
 }

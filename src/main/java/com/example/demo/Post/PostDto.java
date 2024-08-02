@@ -14,7 +14,6 @@ public class PostDto {
     public static PostDto fromPost(Post post) {
         PostDto postDto = new PostDto();
         postDto.setId(post.getId());
-        postDto.title = post.getTitle();
         postDto.content = post.getContent();
         postDto.setMemberNickname(post.getMember().getNickname());
         return postDto;

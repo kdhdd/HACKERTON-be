@@ -27,8 +27,8 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/{commentId}")
-    public ResponseEntity<CommentDto> updateComment(@RequestHeader("Authorization") String token, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
+    @PatchMapping("/update/{commentId}")
+    public ResponseEntity<CommentDto> updateComment(@RequestHeader("Authorization") String token, @PathVariable Long commentId, @RequestBody CommentDto commentDto){
         String jwtToken = token.substring(7);
         String loginId = jwtTokenUtil.getLoginId(jwtToken);
         CommentDto updatedComment = commentService.updateComment(loginId, commentId, commentDto);
@@ -56,5 +56,11 @@ public class CommentController {
     public ResponseEntity<CommentDto> getCommentById(@PathVariable Long commentId) {
         CommentDto comment = commentService.getCommentById(commentId);
         return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
+    }
+    // 닉네임으로 댓글 조회
+    @GetMapping("/user/{nickname}")
+    public ResponseEntity<List<CommentDto>> getCommentsByNickname(@PathVariable String nickname) {
+        List<CommentDto> comments = commentService.getCommentsByNickname(nickname);
+        return ResponseEntity.ok(comments);
     }
 }
