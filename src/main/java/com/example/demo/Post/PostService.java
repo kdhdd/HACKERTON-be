@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -18,7 +19,7 @@ public class PostService {
     private MemberRepository memberRepository;
 
     // 게시글 작성
-    public Post createPost(String loginId, PostDto postDto) {
+    public PostDto createPost(String loginId, PostDto postDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
         // 하루에 한 번만 글 작성할 수 있도록 제한
@@ -26,14 +27,15 @@ public class PostService {
             throw new IllegalStateException("You can only post once a day");
         }
 
-        Post post = new Post(member, postDto.getTitle(), postDto.getContent());
+        Post post = new Post(member, postDto.getContent());
         member.setLastPostDate(LocalDate.now());
         memberRepository.save(member);
+        Post savedPost = postRepository.save(post);
 
-        return postRepository.save(post);
+        return PostDto.fromPost(savedPost);
     }
     // 게시글 수정
-    public Post updatePost(String loginId, Long postId, PostDto postDto) {
+    public PostDto updatePost(String loginId, Long postId, PostDto postDto) {
         Member member = memberRepository.findByLoginId(loginId)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found"));
 
@@ -46,9 +48,10 @@ public class PostService {
         }
 
         // 게시글 내용 수정
-        post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        return postRepository.save(post);
+        postRepository.save(post);
+
+        return PostDto.fromPost(post);
     }
     // 게시글 삭제
     public void deletePost(String loginId, Long postId) {
@@ -66,13 +69,22 @@ public class PostService {
         // 게시글 삭제
         postRepository.delete(post);
     }
+
     // 모든 게시글 조회
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostDto> getAllPosts() {
+        return postRepository.findAll().stream()
+                .map(PostDto::fromPost)
+                .collect(Collectors.toList());
     }
 
     // 특정 게시글 조회
-    public Post getPostById(Long postId) {
-        return postRepository.findById(postId).orElse(null);
+    public PostDto getPostById(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        return post != null ? PostDto.fromPost(post) : null;
+    }
+    // 닉네임으로 게시글 조회
+    public List<PostDto> getPostsByNickname(String nickname) {
+        List<Post> posts = postRepository.findByMemberNickname(nickname);
+        return posts.stream().map(PostDto::fromPost).collect(Collectors.toList());
     }
 }

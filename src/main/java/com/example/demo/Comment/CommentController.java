@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController {
@@ -22,12 +23,12 @@ public class CommentController {
     public ResponseEntity<CommentDto> createComment(@RequestHeader("Authorization") String token, @PathVariable Long postId, @RequestBody CommentDto commentDto) {
         String jwtToken = token.substring(7); // "Bearer " 문자열 제거
         String loginId = jwtTokenUtil.getLoginId(jwtToken); // JWT에서 가져온 로그인 id
-        CommentDto savedComment = commentService.createComment(loginId, postId, commentDto);
-        return ResponseEntity.ok(savedComment);
+        CommentDto createdComment = commentService.createComment(loginId, postId, commentDto);
+        return ResponseEntity.ok(createdComment);
     }
 
     // 댓글 수정
-    @PutMapping("/{commentId}")
+    @PatchMapping("/update/{commentId}")
     public ResponseEntity<CommentDto> updateComment(@RequestHeader("Authorization") String token, @PathVariable Long commentId, @RequestBody CommentDto commentDto) {
         String jwtToken = token.substring(7);
         String loginId = jwtTokenUtil.getLoginId(jwtToken);
@@ -56,5 +57,12 @@ public class CommentController {
     public ResponseEntity<CommentDto> getCommentById(@PathVariable Long commentId) {
         CommentDto comment = commentService.getCommentById(commentId);
         return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
+    }
+
+    // 닉네임으로 댓글 조회
+    @GetMapping("/user/{nickname}")
+    public ResponseEntity<List<CommentDto>> getCommentsByNickname(@PathVariable String nickname) {
+        List<CommentDto> comments = commentService.getCommentsByNickname(nickname);
+        return ResponseEntity.ok(comments);
     }
 }
