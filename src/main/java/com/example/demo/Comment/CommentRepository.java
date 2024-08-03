@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     long countByMember(Member member);
     List<Comment> findByMemberNickname(String nickname);
+    int countByPostId(long postId);
 }
