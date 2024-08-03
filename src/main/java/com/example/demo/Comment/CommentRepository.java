@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     long countByMember(Member member);
     List<Comment> findByMemberNickname(String nickname);
     int countByPostId(long postId);
+    // 닉네임으로 댓글 조회 (최신순 정렬)
+    List<Comment> findByMemberNicknameOrderByCreatedAtDesc(String nickname);
 }

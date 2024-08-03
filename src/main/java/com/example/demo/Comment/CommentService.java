@@ -84,9 +84,9 @@ public class CommentService {
                 .map(CommentDto::fromComment)
                 .orElse(null);
     }
-    // 닉네임으로 댓글 조회
+    // 닉네임으로 댓글 조회 (최신순 정렬)
     public List<CommentDto> getCommentsByNickname(String nickname) {
-        return commentRepository.findByMemberNickname(nickname).stream()
+        return commentRepository.findByMemberNicknameOrderByCreatedAtDesc(nickname).stream()
                 .map(CommentDto::fromComment)
                 .collect(Collectors.toList());
     }

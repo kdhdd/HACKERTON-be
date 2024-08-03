@@ -145,9 +145,9 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    // 모든 게시글 조회
+    // 모든 게시글 조회 (최신순 정렬)
     public List<PostDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAllOrderByCreatedAtDesc();
         return posts.stream().map(post -> {
             PostDto postDto = PostDto.fromPost(post);
             postDto.setCommentCount(commentRepository.countByPostId(post.getId())); // 댓글 개수 설정
@@ -166,9 +166,9 @@ public class PostService {
         return null;
     }
 
-    // 닉네임으로 게시글 조회
+    // 닉네임으로 게시글 조회 (최신순 정렬)
     public List<PostDto> getPostsByNickname(String nickname) {
-        List<Post> posts = postRepository.findByMemberNickname(nickname);
+        List<Post> posts = postRepository.findByMemberNicknameOrderByCreatedAtDesc(nickname);
         return posts.stream().map(post -> {
             PostDto postDto = PostDto.fromPost(post);
             postDto.setCommentCount(commentRepository.countByPostId(post.getId())); // 댓글 개수 설정
