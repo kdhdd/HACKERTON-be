@@ -149,9 +149,7 @@ public class PostService {
     public List<PostDto> getAllPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(post -> {
-            PostDto postDto = new PostDto();
-            postDto.setId(post.getId());
-            postDto.setContent(post.getContent());
+            PostDto postDto = PostDto.fromPost(post); // 변환된 객체를 반환값으로 사용
             postDto.setCommentCount(commentRepository.countByPostId(post.getId())); // 댓글 개수 설정
             return postDto;
         }).collect(Collectors.toList());
