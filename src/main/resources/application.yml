@@ -12,7 +12,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${SPRING_DATASOURCE_URL}
-    username: test
+    username: testServer
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     database: mysql
@@ -23,3 +23,45 @@ spring:
     properties:
       hibernate:
         format_sql: true
+#spring:
+#  application:
+#    name: demo
+#
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${SPRING_DATASOURCE_URL}
+#    username: testServer
+#    password: ${SPRING_DATASOURCE_PASSWORD}
+#
+#  jpa:
+#    database: mysql
+#    database-platform: org.hibernate.dialect.MySQLDialect
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
+#
+#  doc:
+#    api-docs:
+#      enabled: true
+#      path: /api-docs
+#    swagger-ui:
+#      enabled: true
+#      path: /swagger-ui.html
+#    paths-to-match:
+#      - /api/**
+#
+#  server:
+#    ssl:
+#      enabled: true
+#      key-store: classpath:keystore.p12
+#      key-store-password: 0413
+#      key-store-type: PKCS12
+#      key-alias: tomcat
+#    port: 8443
+#
+#logging:
+#  level:
+#    org.springframework.security: DEBUG

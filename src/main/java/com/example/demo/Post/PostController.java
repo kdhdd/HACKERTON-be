@@ -73,6 +73,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "https://letssleepathome.store")
 public class PostController {
 
     @Autowired
