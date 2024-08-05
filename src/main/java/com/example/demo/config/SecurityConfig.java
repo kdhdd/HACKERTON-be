@@ -66,7 +66,8 @@ public class SecurityConfig {
         corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store")); // 허용할 도메인 설정
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-        corsConfiguration.setExposedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true); // 자격 증명 허용
+        corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type")); // 노출할 헤더 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
