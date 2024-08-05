@@ -25,8 +25,6 @@ public class Post {
     @JsonBackReference
     private Member member;
 
-    @Column(nullable = false)
-    private String title;
 
     @Column(nullable = false)
     private String content;
@@ -40,9 +38,8 @@ public class Post {
     public Post() {
     }
 
-    public Post(Member member, String title, String content) {
+    public Post(Member member,  String content) {
         this.member = member;
-        this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
     }

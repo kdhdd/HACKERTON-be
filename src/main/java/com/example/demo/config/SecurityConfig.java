@@ -63,21 +63,15 @@ public class SecurityConfig {
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("*"));
-        corsConfiguration.setAllowedHeaders(
-                List.of("*")
-        );
-        corsConfiguration.setAllowedMethods(
-                Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH")
-        );
-        corsConfiguration.setExposedHeaders(
-                List.of("*")
-        );
+        corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store")); // 허용할 도메인 설정
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
+        corsConfiguration.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**",
-                corsConfiguration);
+        source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
     }
 }
+

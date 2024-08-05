@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -21,12 +24,19 @@ public class SwaggerConfig {
                 .scheme("bearer")
                 .bearerFormat("JWT")
         );
+
+        // HTTPS URL 설정
+        Server server = new Server();
+        server.setUrl("https://letssleepathome.store");
+
         return new OpenAPI()
                 .components(new Components())
                 .info(apiInfo())
                 .addSecurityItem(securityRequirement)
-                .components(components);
+                .components(components)
+                .servers(List.of(server)); // 서버 설정 추가
     }
+
     private Info apiInfo() {
         return new Info()
                 .title("해커톤 API 명세서")
