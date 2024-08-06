@@ -73,7 +73,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
-@CrossOrigin(origins = "https://letssleepathome.store")
+@CrossOrigin(origins = {"https://letssleepathome.store", "https://prismatic-moonbeam-7fe320.netlify.app/"})
 public class PostController {
 
     @Autowired

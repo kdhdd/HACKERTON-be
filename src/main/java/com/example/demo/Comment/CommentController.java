@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
-@CrossOrigin(origins = "https://letssleepathome.store")
+@CrossOrigin(origins = {"https://letssleepathome.store", "https://prismatic-moonbeam-7fe320.netlify.app/"})
 public class CommentController {
 
     @Autowired

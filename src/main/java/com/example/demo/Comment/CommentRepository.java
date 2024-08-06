@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+    //회원탈퇴시 기존 댓글 삭제
+    List<Comment> findByMember(Member member);
     long countByMember(Member member);
     List<Comment> findByMemberNickname(String nickname);
     int countByPostId(long postId);

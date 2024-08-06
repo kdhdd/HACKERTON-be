@@ -1,7 +1,9 @@
 package com.example.demo.Member;
 
+import com.example.demo.Comment.Comment;
 import com.example.demo.Comment.CommentRepository;
 //import com.example.demo.Heart.HeartRepository;
+import com.example.demo.Post.Post;
 import com.example.demo.Post.PostRepository;
 import com.example.demo.auth.JwtTokenUtil;
 import com.example.demo.request.JoinRequest;
@@ -44,6 +46,18 @@ public class MemberService {
 
     @Transactional
     public void deleteMember(Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+
+        // Delete posts
+        List<Post> posts = postRepository.findByMember(member);
+        postRepository.deleteAll(posts);
+
+        // Delete comments
+        List<Comment> comments = commentRepository.findByMember(member);
+        commentRepository.deleteAll(comments);
+
+        // Delete member
         memberRepository.deleteById(id);
     }
 

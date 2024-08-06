@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
@@ -63,15 +65,126 @@ public class SecurityConfig {
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store")); // 허용할 도메인 설정
+        corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store", "https://prismatic-moonbeam-7fe320.netlify.app/")); // 허용할 도메인 설정
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-        corsConfiguration.setExposedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true); // 자격 증명 허용
+        corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type")); // 노출할 헤더 설정
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfiguration);
 
         return source;
     }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("https://letssleepathome.store", "https://66b0a4517275d7c5369785c3--steady-bublanina-eca6df.netlify.app")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                        .allowedHeaders("*")
+                        .allowCredentials(true)
+                        .exposedHeaders("Authorization", "Content-Type");
+            }
+        };
+    }
 }
+//@Configuration
+//@EnableWebSecurity
+//@RequiredArgsConstructor
+//public class SecurityConfig {
+//
+//    private final JwtTokenFilter jwtTokenFilter;
+//
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .httpBasic(HttpBasicConfigurer::disable)
+//                .csrf(CsrfConfigurer::disable)
+//                .sessionManagement(sessionManagement ->
+//                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .formLogin(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests(authorizeRequests ->
+//                        authorizeRequests
+//                                .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
+//                                .permitAll()
+//                                .requestMatchers("/api/posts/**").authenticated()
+//                                .requestMatchers("/api/members/login").permitAll()
+//                                .requestMatchers("/api/members/join").permitAll()
+//                                .requestMatchers("/api/members/info").authenticated()
+//                                .requestMatchers("/api/members/admin/**").hasAuthority(UserRole.ADMIN.name())
+//                                .anyRequest().permitAll()
+//                )
+//                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+//                .headers(
+//                        headersConfigurer ->
+//                                headersConfigurer
+//                                        .frameOptions(
+//                                                HeadersConfigurer.FrameOptionsConfig::sameOrigin
+//                                        )
+//                );
+//
+//        return http.build();
+//    }
+
+
+
+// 위에는 진짜 코드였음
+    //여기서부터 밑에는 가짜코드들
+//    @Bean
+//    protected CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store", "https://66b0a4517275d7c5369785c3--steady-bublanina-eca6df.netlify.app")); // 허용할 도메인 설정
+//        corsConfiguration.setAllowedHeaders(List.of("*"));
+//        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
+////        corsConfiguration.setExposedHeaders(List.of("*"));
+//        corsConfiguration.setAllowCredentials(true); // 자격 증명 허용
+//        corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type")); // 노출할 헤더 설정
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return source;
+//    }
+
+//    @Bean
+//    protected CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedOrigins(List.of("*"));
+//        corsConfiguration.setAllowedHeaders(
+//                List.of("*")
+//        );
+//        corsConfiguration.setAllowedMethods(
+//                Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH")
+//        );
+//        corsConfiguration.setExposedHeaders(
+//                List.of("*")
+//        );
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return source;
+//    }
+
+//    @Bean
+//    protected CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.setAllowedOrigins(List.of("https://letssleepathome.store")); // 허용할 도메인 설정
+//        corsConfiguration.setAllowedHeaders(List.of("*"));
+//        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
+//        corsConfiguration.setAllowCredentials(true); // 자격 증명 허용
+//        corsConfiguration.setExposedHeaders(List.of("Authorization", "Content-Type")); // 노출할 헤더 설정
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return source;
+//    }
+
+
 

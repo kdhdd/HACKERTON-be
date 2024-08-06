@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://letssleepathome.store")
+@CrossOrigin(origins = {"https://letssleepathome.store", "https://prismatic-moonbeam-7fe320.netlify.app/"})
 public class MemberController {
 
     private final MemberService memberService;
@@ -62,8 +62,13 @@ public class MemberController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
-        memberService.deleteMember(id);
-        return ResponseEntity.noContent().build();
+        try {
+            memberService.deleteMember(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            logger.error("Error deleting member", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PatchMapping("/update")
