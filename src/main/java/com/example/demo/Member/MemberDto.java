@@ -8,7 +8,7 @@ import lombok.Setter;
 public class MemberDto {
     //private Long id;
     private String nickname;
-    private String loginId;
+    //private String loginId;
     private String password;
     private boolean today;
 
@@ -17,7 +17,7 @@ public class MemberDto {
         //memberDto.setId(member.getId());
         memberDto.setPassword(member.getPassword());
         memberDto.setNickname(member.getNickname());
-        memberDto.setLoginId(member.getLoginId());
+        //memberDto.setLoginId(member.getLoginId());
         memberDto.setToday(member.isToday());
         return memberDto;
     }
